@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+
+<html lang="en-US" dir="ltr">
+
+<head>
+
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="stylesheet" href="./layout.css">
+	<link rel="stylesheet" href="./aesthetics.css">
+
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Rubik">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=JetBrains+Mono">
+
+	<title>FLOODFILL | CSC 108</title>
+
+</head>
+
+<body>
+
+	<!-- Left-hand Panels -->
+	<div class="left_panels">
+		<div class="title_panel">
+			<span class="glow">FLOODFILL</span>
+		</div>
+		<div class="settings_panel">
+			<span class="glow">SETTINGS</span>
+			<div>
+				<button id="grid_up">&uarr;</button><span class="tab_span"></span><span>Grid Width</span><span class="tab_span"></span><button id="grid_down">&darr;</button>
+			</div>
+			<div>
+				<button id="color_up">&uarr;</button><span class="tab_span"></span><span>Color Count</span><span class="tab_span"></span><button id="color_down">&darr;</button>
+			</div>
+			<button id="reset_game">Start New</button>
+		</div>
+	</div>
+
+	<!-- Center Panels -->
+	<div class="center_panels">
+		<div class="game_panel">
+			<div id="game_grid">
+				<!-- All the JS-loaded HTML gets loaded here. -->
+			</div>
+		</div>
+	</div>
+
+	<!-- Right-hand Panels -->
+	<div class="right_panels">
+		<div class="information_panel">
+			<span class="glow">INFORMATION</span>
+			<span id="dimensions"></span>
+			<span id="moves"></span>
+			<span id="colors"></span>
+		</div>
+		<div class="credits_panel">
+			<p class="glow">CREDITS<br><br>Princess Beverly Ala-an<br>Earl James Williams Aliñgasa</p>
+		</div>
+	</div>
+
+	<!-- Imported JS -->
+	<script src="./scripts.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,79 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body
+{
+	/* Setting the dimensions. */
+	height: 100vh;
+	width: 100vw;
+
+	/* Setting flexbox display settings. */
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 64px;
+}
+
+.center_panels
+{
+	height: 80vh;
+	width: 80vh;
+}
+
+.left_panels,
+.right_panels,
+.center_panels,
+.title_panel,
+.credits_panel,
+.game_panel
+{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.left_panels,
+.right_panels
+{
+	flex-direction: column;
+	gap: 64px;
+}
+
+.game_panel
+{
+	height: 90%;
+	width: 90%;
+}
+
+.title_panel,
+.credits_panel
+{
+	width: 20vw;
+	padding: 16px;
+}
+
+.settings_panel,
+.information_panel
+{
+	width: 20vw;
+
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	gap: 16px;
+
+	padding: 16px;
+}
+
+.credits_panel > p
+{
+	text-align: center;
+}
+
+#t1
+{
+	color: red;
+}

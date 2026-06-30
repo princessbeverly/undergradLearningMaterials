@@ -1,0 +1,111 @@
+:root
+{
+	/* Floodfill Tile Colors */
+	--pretty_indigo: #2a2a6b;
+	--pretty_red: #f04f53;
+	--pretty_yellow: #f7e43b;
+	--pretty_green: #34c2a4;
+	--pretty_light: #f2eee9;
+	--pretty_dark: #262628;
+
+	/* Background Gray Tones */
+	--level_1_gray: #101010;
+	--level_2_gray: #202020;
+	--level_3_gray: #303030;
+	--level_4_gray: #404040;
+	--level_5_gray: #505050;
+
+	/* Border Radii */
+	--level_1_radius: 32px;
+	--level_2_radius: calc(2 * var(--level_1_radius));
+
+	/* Box Shadows */
+	--button_shadow: 0 0 8px 4px black;
+	--dark_shadow: 0 0 12px 6px black inset;
+	--tile_shadow: 0 0 4px 2px #00000080;
+}
+
+body
+{
+	font-family: 'Roboto';
+	color: var(--pretty_light);
+	background-color: var(--level_3_gray);
+}
+
+.game_panel
+{
+	background-color: var(--level_1_gray);
+	border-radius: var(--level_1_radius);
+	box-shadow: var(--dark_shadow);
+}
+
+.center_panels
+{
+	background-color: var(--level_2_gray);
+	border-radius: var(--level_2_radius);
+	box-shadow: var(--dark_shadow);
+}
+
+.title_panel,
+.settings_panel,
+.information_panel,
+.credits_panel
+{
+	background-color: var(--level_2_gray);
+	border-radius: var(--level_1_radius);
+	box-shadow: var(--dark_shadow);
+	text-align: center;
+}
+
+.glow
+{
+	color: var(--pretty_light);
+	text-shadow: 0 0 6px white;
+	font-family: 'Rubik';
+	font-weight: bold;
+}
+
+.title_panel > span
+{
+	font-size: 36px;
+}
+
+#game_grid
+{
+	line-height: 0;
+}
+
+.tile:hover
+{
+	border: 2px solid white;
+}
+
+button
+{
+	vertical-align: top;
+	background-color: var(--pretty_light);
+	border: none;
+	padding: 2px 8px;
+	border-radius: var(--level_1_radius);
+	box-shadow: var(--button_shadow);
+	font-weight: bold;
+	font-family: 'JetBrains Mono';
+	transition: 0.1s;
+}
+
+.tab_span
+{
+	width: 16px;
+	display: inline-block;
+}
+
+button:hover
+{
+	background-color: var(--pretty_red);
+}
+
+button:active
+{
+	box-shadow: none;
+	transform: scale(90%);
+}

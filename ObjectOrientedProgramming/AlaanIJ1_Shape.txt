@@ -1,0 +1,43 @@
+
+public class Shape {
+	
+	public void calculateArea() {
+		
+	}
+	
+	public static void main(String[] args) {
+		Shape circle01 = new Circle(50);
+		Shape rectangle01 = new Rectangle(30, 40);
+		
+		circle01.calculateArea();
+		rectangle01.calculateArea();
+	}
+}
+
+class Circle extends Shape {
+	private int radius;
+	
+	public Circle(int i) {
+		this.radius = i;
+	}
+	public void calculateArea() {
+		double total_area = 3.14*(radius*radius);
+		System.out.println("Total area of the circle is " + total_area);
+	}
+}
+
+class Rectangle extends Shape {
+	private int width;
+	private int length;
+	public Rectangle(int i, int j) {
+		this.width = i;
+		this.length = j;
+	}
+
+	public void calculateArea() {
+		double total_area = length * width;
+		System.out.println("Total area of the rectangle is " + total_area);
+	}
+}
+
+ 

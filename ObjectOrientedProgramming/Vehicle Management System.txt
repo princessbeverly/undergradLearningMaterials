@@ -1,0 +1,86 @@
+
+public class Vehicle {
+	private String model;
+	private int year;
+	
+	public Vehicle() {
+	}
+	
+	public Vehicle(String model, int year) {
+		this.model = model;
+		this.year = year;
+	}
+	
+	//Accessor Methods
+	public String getmodel() {
+		return model;
+	}
+	
+	public int getyear() {
+		return year;
+	}
+	
+}
+
+class Main{
+	public static void main(String[] args) {
+	Car car = new Car("Yamaha", "XYZ", 2022);
+	Bicycle bike = new Bicycle("Mountain Bike", "Off-road", 2020);
+	
+	//assign instance to variables of Vehicle
+	Vehicle v1 = car;
+	Vehicle v2 = bike;
+	
+	//typecasting
+	Car oCar = (Car) v1;
+	Bicycle oBike = (Bicycle) v2;
+	
+	System.out.println("Car Model: " + oCar.getmodel());
+    System.out.println("Car Year: " + oCar.getyear());
+    System.out.println("Car Brand: " + oCar.getBrand());
+
+    System.out.println("Bicycle Model: " + oBike.getmodel());
+    System.out.println("Bicycle Year: " + oBike.getyear());
+    System.out.println("Bicycle Type: " + oBike.gettype());
+	}
+}
+
+
+public class Car extends Vehicle{
+	private String brand;
+	
+	public Car(String string, String string2, int i) {
+	
+	}
+	
+	public Car(String brand) {
+		this.brand = brand;
+	}
+	
+	//Accessor Method
+	public String getBrand() {
+		return brand;
+	}
+
+	public String getyear(int i) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+}
+
+public class Bicycle extends Vehicle{
+	private String type;
+	
+	public Bicycle() {
+		
+	}
+	
+	public Bicycle(String type, String string, int i) {
+		this.type = type;
+	}
+	
+	public String gettype() {
+		return type;
+	}
+}

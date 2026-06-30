@@ -1,0 +1,292 @@
+this is my network topology... 
+
+* multilayer switch0:
+- (Gig0/2) is connected to multilayer switch1(Gig0/2), 
+- (Gig0/1) is connected to switch0(Gig0/1), 
+- (Fa0/24) is connected to switch1(Fa0/24).
+ 
+* multilayer switch1:
+- (Gig0/2) is connected to multilayer switch0(Gig0/2),
+- (Fa0/24) is connected to switch0(Fa0/24),
+- (Gig0/1) is connected to switch1(Gig0/1).
+
+
+* switch0:
+- (Gig0/1) is connected to multilayer switch0(Gig0/1), 
+- (Fa0/24) is connected to multilayer switch1(Fa0/24),
+- (Gig0/2) is connected to switch1(Gig0/2),
+- (Fa0/23) is connected to access point0,
+- (Fa0/1) is connected to pc0,
+- (Fa0/2) is connected to pc1.
+
+* switch1:
+- (Fa0/24) is connected to multilayer switch0(Fa0/24),
+- (Gig0/1) multilayer switch1(Gig0/1),
+- (Gig0/2) is connected to switch0(Gig0/2),
+- (Fa0/1) is connected to pc2,
+- (Fa0/2) is connected to pc3,
+- (Fa0/3) is connected to pc4.
+ 
+* access point:
+ is connected to switch0(Fa0/23), and wirelessly to laptop0.
+
+
+(on multilayer switch 0[CORE — routing + DHCP]):----------------------------------------------------------
+enable
+configure terminal
+
+! --- VLANs + names ---
+vlan 10
+ name Employees
+exit
+vlan 20
+ name Admins
+exit
+vlan 30
+ name Wireless
+exit
+
+! --- SVIs (gateway IPs for each VLAN) ---
+interface Vlan10
+ ip address 192.168.10.1 255.255.255.0
+ no shutdown
+exit
+
+interface Vlan20
+ ip address 192.168.20.1 255.255.255.0
+ no shutdown
+exit
+
+interface Vlan30
+ ip address 192.168.30.1 255.255.255.0
+ no shutdown
+exit
+
+! Enable L3 routing
+ip routing
+
+! --- DHCP pools on core ---
+ip dhcp excluded-address 192.168.10.1 192.168.10.10
+ip dhcp excluded-address 192.168.20.1 192.168.20.10
+ip dhcp excluded-address 192.168.30.1 192.168.30.10
+
+ip dhcp pool VLAN10
+ network 192.168.10.0 255.255.255.0
+ default-router 192.168.10.1
+ dns-server 8.8.8.8
+exit
+
+ip dhcp pool VLAN20
+ network 192.168.20.0 255.255.255.0
+ default-router 192.168.20.1
+ dns-server 8.8.8.8
+exit
+
+ip dhcp pool VLAN30
+ network 192.168.30.0 255.255.255.0
+ default-router 192.168.30.1
+ dns-server 8.8.8.8
+exit
+
+! --- Trunk links (adjust interface names if your hardware differs) ---
+! Gi0/2 -> multilayer switch1 Gi0/2 (trunk)
+interface GigabitEthernet0/2
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport trunk allowed vlan 10
+ switchport trunk allowed vlan add 20
+ switchport trunk allowed vlan add 30
+ no shutdown
+exit
+
+! Gi0/1 -> switch0 Gi0/1 (trunk)
+interface GigabitEthernet0/1
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport trunk allowed vlan 10
+ switchport trunk allowed vlan add 20
+ switchport trunk allowed vlan add 30
+ no shutdown
+exit
+
+! Fa0/24 -> switch1 Fa0/24 (trunk)
+interface FastEthernet0/24
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport trunk allowed vlan 10
+ switchport trunk allowed vlan add 20
+ switchport trunk allowed vlan add 30
+ no shutdown
+exit
+
+
+
+(on multilayer switch 1 [distribution — keep as L2/trunk; avoid SVI IPs that conflict]):----------------------------------------------------------
+enable
+configure terminal
+
+! Create VLANs locally so switch learns them (optional but good)
+vlan 10
+ name Employees
+exit
+vlan 20
+ name Admins
+exit
+vlan 30
+ name Wireless
+exit
+
+! Gi0/2 -> multilayer switch0 Gi0/2 (trunk)
+interface GigabitEthernet0/2
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport trunk allowed vlan 10
+ switchport trunk allowed vlan add 20
+ switchport trunk allowed vlan add 30
+ no shutdown
+exit
+
+! Fa0/24 -> switch0 Fa0/24 (trunk)
+interface FastEthernet0/24
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport trunk allowed vlan 10
+ switchport trunk allowed vlan add 20
+ switchport trunk allowed vlan add 30
+ no shutdown
+exit
+
+! Gi0/1 -> switch1 Gi0/1 (trunk)
+interface GigabitEthernet0/1
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport trunk allowed vlan 10
+ switchport trunk allowed vlan add 20
+ switchport trunk allowed vlan add 30
+ no shutdown
+exit
+
+! Access ports for PCs on switch1 (Admins = VLAN20)
+interface range FastEthernet0/1 - 3
+ switchport mode access
+ switchport access vlan 20
+ spanning-tree portfast
+ no shutdown
+exit
+
+
+
+(switch0 [access switch connected to core & AP & PCs]):----------------------------------------------------------enable
+enable
+configure terminal
+
+! Gi0/1 -> multilayer switch0 Gi0/1 (trunk)
+interface GigabitEthernet0/1
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport trunk allowed vlan 10
+ switchport trunk allowed vlan add 20
+ switchport trunk allowed vlan add 30
+ no shutdown
+exit
+
+! Fa0/24 -> multilayer switch1 Fa0/24 (trunk)
+interface FastEthernet0/24
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport trunk allowed vlan 10
+ switchport trunk allowed vlan add 20
+ switchport trunk allowed vlan add 30
+ no shutdown
+exit
+
+! Gi0/2 -> switch1 Gi0/2 (trunk)  (L2 inter-switch link)
+interface GigabitEthernet0/2
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport trunk allowed vlan 10
+ switchport trunk allowed vlan add 20
+ switchport trunk allowed vlan add 30
+ no shutdown
+exit
+
+! PC0 & PC1 -> VLAN10 (Employees)
+interface FastEthernet0/1
+ switchport mode access
+ switchport access vlan 10
+ spanning-tree portfast
+ no shutdown
+exit
+
+interface FastEthernet0/2
+ switchport mode access
+ switchport access vlan 10
+ spanning-tree portfast
+ no shutdown
+exit
+
+! AP connected on Fa0/23 -> put AP in VLAN30 (single-SSID case)
+interface FastEthernet0/23
+ switchport mode access
+ switchport access vlan 30
+ spanning-tree portfast
+ no shutdown
+exit
+
+
+
+(switch1 [access switch connected to multilayer switch1 & switch0])------------------------------------------------------------------------
+enable
+configure terminal
+
+! Fa0/24 -> multilayer switch0 Fa0/24 (trunk)
+interface FastEthernet0/24
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport trunk allowed vlan 10
+ switchport trunk allowed vlan add 20
+ switchport trunk allowed vlan add 30
+ no shutdown
+exit
+
+! Gi0/1 -> multilayer switch1 Gi0/1 (trunk)
+interface GigabitEthernet0/1
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport trunk allowed vlan 10
+ switchport trunk allowed vlan add 20
+ switchport trunk allowed vlan add 30
+ no shutdown
+exit
+
+! Gi0/2 -> switch0 Gi0/2 (trunk)
+interface GigabitEthernet0/2
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport trunk allowed vlan 10
+ switchport trunk allowed vlan add 20
+ switchport trunk allowed vlan add 30
+ no shutdown
+exit
+
+! PCs (VLAN20)
+interface FastEthernet0/1
+ switchport mode access
+ switchport access vlan 20
+ spanning-tree portfast
+ no shutdown
+exit
+
+interface FastEthernet0/2
+ switchport mode access
+ switchport access vlan 20
+ spanning-tree portfast
+ no shutdown
+exit
+
+interface FastEthernet0/3
+ switchport mode access
+ switchport access vlan 20
+ spanning-tree portfast
+ no shutdown
+exit
